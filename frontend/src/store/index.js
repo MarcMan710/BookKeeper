@@ -12,7 +12,7 @@ export default createStore({
   },
   getters: {
     getBookById: (state) => (id) => {
-      return state.books.find(book => book.id === id)
+      return state.books.find(book => book.id == id)
     },
     searchBooks: (state) => (query) => {
       if (!query) return state.books

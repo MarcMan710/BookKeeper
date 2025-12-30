@@ -92,9 +92,9 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'EditBook',
@@ -107,10 +107,10 @@ export default {
   setup(props) {
     const store = useStore()
     const router = useRouter()
-    const route = useRoute()
     const loading = ref(true)
     const saving = ref(false)
     const error = ref(null)
+    const books = computed(() => store.state.books)
 
     const form = ref({
       title: '',
@@ -122,6 +122,9 @@ export default {
     const loadBook = async () => {
       loading.value = true
       try {
+        if (books.value.length === 0) {
+          await store.dispatch('fetchBooks')
+        }
         const book = store.getters.getBookById(props.id)
         if (book) {
           form.value = { ...book }
